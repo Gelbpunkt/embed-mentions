@@ -1,5 +1,6 @@
 import discord
 import sys
+import traceback
 from discord.ext import commands
 from utils.checks import *
 
