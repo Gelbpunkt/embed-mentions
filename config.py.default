@@ -1,4 +1,4 @@
-db = {"database": "mycb", "user": "myuser", "password": "mypass", "host": "127.0.0.1"}
+db = {"database": "mydb", "user": "myuser", "password": "mypass", "host": "127.0.0.1"}
 token = "my token"
 startup_exts = ["cogs.events", "cogs.register", "cogs.misc", "cogs.owner"]
 
