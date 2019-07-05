@@ -1,18 +1,19 @@
-import discord
-from discord.ext import commands
-import asyncpg
 import asyncio
+import traceback
+
+import asyncpg
+from discord.ext import commands
+
 import config
 
 bot = commands.Bot(command_prefix="em!", description="DMing you mentions in embeds.")
 bot.load_extension("jishaku")
-bot.owners = [356_091_260_429_402_122, 244_508_568_517_083_136]
 bot.config = config
 
 for ext in config.startup_exts:
     try:
         bot.load_extension(ext)
-    except:
+    except Exception:
         print(f"Failed to load {ext}")
         traceback.print_exc()
 

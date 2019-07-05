@@ -1,16 +1,24 @@
-import discord
 import sys
 import traceback
+
+import discord
 from discord.ext import commands
-from utils.checks import *
+
+from utils.checks import AlreadyRegistered, NeedsRegistered
 
 
-class Events:
+class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.bot.on_command_error = self._on_command_error
 
     async def has_mentions(self, msg: discord.Message, em: discord.Embed):
-        texts = f"{em.title}{em.description}{em.footer.text}{''.join([f.value for f in em.fields])}"
+        texts = (
+            f"{em.title}"
+            f"{em.description}"
+            f"{em.footer.text}"
+            f"{''.join([f.value for f in em.fields])}"
+        )
         users = [
             u
             for u in self.bot.registered
@@ -19,12 +27,15 @@ class Events:
         for u in users:
             try:
                 await self.bot.get_user(u).send(
-                    f"You have been mentioned in an embed by **{msg.author}** in server **{msg.guild.name}**!\nJump to: {msg.jump_url}",
+                    f"""\
+You have been mentioned in an embed by **{msg.author}** in server **{msg.guild.name}**!
+Jump to: {msg.jump_url}""",
                     embed=em,
                 )
             except discord.Forbidden:
                 pass
 
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot and not message.embeds:
             return
@@ -35,7 +46,7 @@ class Events:
         if message.embeds:
             await self.has_mentions(message, message.embeds[0])
 
-    async def on_command_error(self, ctx, error):
+    async def _on_command_error(self, ctx, error):
         error = getattr(error, "original", error)
         if isinstance(error, discord.Forbidden):
             return

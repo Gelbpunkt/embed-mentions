@@ -1,12 +1,11 @@
-import discord
 from discord.ext import commands
 
 
-class Owner:
+class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def __local_check(self, ctx):
+    def cog_check(self, ctx):
         return self.bot.is_owner(ctx.author)
 
     @commands.command(hidden=True)

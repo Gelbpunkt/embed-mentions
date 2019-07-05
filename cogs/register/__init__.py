@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
-from utils.checks import *
+
+from utils.checks import not_registered, registered
 
 
-class Register:
+class Register(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -13,7 +14,8 @@ class Register:
         """Trigger notifications for mentions in embeds."""
         try:
             await ctx.author.send(
-                "You have DMs turned on. Great! This message is a test if I can DM you when it happens."
+                "You have DMs turned on. Great!"
+                "This message is a test if I can DM you when it happens."
             )
         except discord.Forbidden:
             return await ctx.send(
